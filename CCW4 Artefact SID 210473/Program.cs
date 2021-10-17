@@ -24,161 +24,133 @@ namespace CCW4_Artefact_SID_210473
     {
         public const int MIN_TEAM_LIMIT = 3;
         public List<Member> devTeam = new List<Member>();
-        public static Program program = new Program();
 
         static void Main(string[] args)
         {
             WriteLine("Welcome to the Development Team Program!\nPress enter to continue...");
             ReadLine();
-
+            Program program = new Program();
             program.MemberInit();
         }
 
         void MemberInit()
         {
-            Clear();
-            bool temp = IsInfoCorrect("Would you like to add a new member to the team? (Y/N)");
-            if (!temp && devTeam.Count < 3) 
+            while (true)
             {
                 Clear();
-                WriteLine("You don't have at least 3 members for a team\nPlease create a new member\nPress enter to continue...");
-                ReadLine();
-                MemberInit(); 
+                bool addNewMember = IsInfoCorrect("Would you like to add a new member to the team? (Y/N)");
+                if (!addNewMember && devTeam.Count < MIN_TEAM_LIMIT) 
+                {
+                    Clear();
+                    WriteLine("You need at least 3 members for a team\nPlease create a new member\nPress enter to continue...\n");
+                    WriteLine("Current Members:");
+                    for (int i = 0; i < devTeam.Count; i++)
+                    {
+                        PrintMembers(devTeam[i]);
+                    }
+                    ReadLine();
+                    continue; 
+                } else if (!addNewMember && devTeam.Count >= MIN_TEAM_LIMIT)
+                {
+                    break;
+                }
+
+                Member tempMember = new Member();
+                while (true)
+                {
+                    tempMember.name = NameInit();
+                    tempMember.age = AgeInit();
+                    tempMember.profession = ProfessionInit();
+                    tempMember.workAvailability = WorkInit();
+
+                    Clear();
+                    PrintMembers(tempMember);
+                    bool allInfoCorrect = IsInfoCorrect("\n(Y/N)");
+                    if (allInfoCorrect) { break; }
+                }
+                devTeam.Add(tempMember);
             }
 
-            Member tempMember = new Member();
-            bool allInfoCorrect = false;
-            do
+            Clear();
+            WriteLine("The final team is:\n");
+            for (int i = 0; i < devTeam.Count; i++)
             {
-
-                tempMember.name = NameInit();
-                tempMember.age = AgeInit();
-                tempMember.profession = ProfessionInit();
-                tempMember.workAvailability = WorkInit();
-
-                Clear();
-                allInfoCorrect = IsInfoCorrect($"Is this info correct?" +
-                    $"\nName: {tempMember.name}" +
-                    $"\nAge: {tempMember.age}" +
-                    $"\nProfession: {tempMember.profession}" +
-                    $"\nAvailablilty: {tempMember.workAvailability}" +
-                    $"\n(Y/N)");
-
-            } while (!allInfoCorrect);
-
-            devTeam.Add(tempMember);
-
+                PrintMembers(devTeam[i]);
+            }
+            ReadLine();
         }
-
+        void PrintMembers(Member member)
+        {            
+            WriteLine($@"
+Name: {member.name}
+Age: {member.age}
+Profession: {member.profession}
+Availablilty: {member.workAvailability}");          
+        }
         string NameInit()
         {
-
-            bool validAnswer = false;
-            string tempName = string.Empty;
-            do
+            while (true)
             {
                 Clear();
                 WriteLine("Please enter Members' name:");
-                tempName = ReadLine();
-                validAnswer = IsInfoCorrect($"Is the name ({tempName}) correct? (Y/N)");
-
-            } while (!validAnswer);
-            
-            return tempName;
+                string tempName = ReadLine();
+                bool validAnswer = IsInfoCorrect($"Is the name ({tempName}) correct? (Y/N)");
+                if (validAnswer) { return tempName; }
+            }
         }
-
         int AgeInit()
         {
-
-            bool validAnswer = false;
-            int tempAge = 0;
-            do
+            while (true)
             {
                 Clear();
                 WriteLine("Please enter Members' age: (Must be above 18!)");
-                bool isInt = int.TryParse(ReadLine(), out tempAge);
-                if (!isInt)
-                {
-                    AgeInit();
-                }
-                validAnswer = IsInfoCorrect($"Is the age ({tempAge}) correct? (Y/N)");
-
-            } while (!validAnswer && tempAge < 18);
-
-            return tempAge;
+                bool isInt = int.TryParse(ReadLine(), out int tempAge);
+                if (!isInt || tempAge < 18) { continue; }
+                bool validAnswer = IsInfoCorrect($"Is the age ({tempAge}) correct? (Y/N)");
+                if (validAnswer) { return tempAge; }
+            }
         }
-
         Profession ProfessionInit()
         {
-
-            bool validAnswer = false;
-            Profession tempProf = Profession.Artist;
-            do
+            while (true)
             {
                 Clear();
                 WriteLine("Please enter Members' profession: (Programmer, Designer, Artist, Audio)");
                 bool isProf = Enum.TryParse(typeof(Profession), ReadLine(), true, out object parsedEnumVal);
-                if (!isProf)
-                {
-                    ProfessionInit();
-                } else
-                {
-                    tempProf = (Profession)parsedEnumVal;
-                }
-                validAnswer = IsInfoCorrect($"Is the profession ({tempProf}) correct? (Y/N)");
-
-            } while (!validAnswer);
-
-            return tempProf;
+                if (!isProf) { continue; }
+                bool validAnswer = IsInfoCorrect($"Is the profession ({(Profession)parsedEnumVal}) correct? (Y/N)");
+                if (validAnswer) { return (Profession)parsedEnumVal; }
+            } 
         }
-
         bool WorkInit()
         {
-
-            bool validAnswer = false;
-            bool tempWork = false;
-            do
+            while (true)
             {
                 Clear();
-                tempWork = IsInfoCorrect("Is Member available to work? (Y/N)");
-                validAnswer = IsInfoCorrect($"Is the availablity ({tempWork}) correct? (Y/N)");
-
-            } while (!validAnswer);
-
-            return false;
+                bool tempWork = IsInfoCorrect("Is Member available to work? (Y/N)");
+                bool validAnswer = IsInfoCorrect($"Is the availablity ({tempWork}) correct? (Y/N)");
+                if (validAnswer) { return tempWork; }
+            } 
         }
-
         bool IsInfoCorrect(string text)
         {
-            bool hasInputValidAnswer = false;
-            bool answer = false;
-
-            do
+            while (true)
             {
                 Clear();
                 WriteLine(text);
-                string temp = ReadLine();
-                switch (temp.ToLower())
+                switch (ReadLine().ToLower())
                 {
                     case "y":
-                        hasInputValidAnswer = true;
-                        answer = true;
-                        break;
+                        return true;
                     case "n":
-                        hasInputValidAnswer = true;
-                        answer = false;
-                        break;
+                        return false;
                     default:
-                        hasInputValidAnswer = false;
                         Clear();
                         WriteLine("That is an invalid answer please try again\nPress enter to continue...");
                         ReadLine();
-                        break;
+                        continue;
                 }
-
-            } while (!hasInputValidAnswer);
-
-            return answer;
+            }
         }
     }
 }
