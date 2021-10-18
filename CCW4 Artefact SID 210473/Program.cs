@@ -27,12 +27,11 @@ namespace CCW4_Artefact_SID_210473
 
         static void Main(string[] args)
         {
-            WriteLine("Welcome to the Development Team Program!\nPress enter to continue...");
+            WriteLine("Welcome to the Development Team Program!\nPress enter to continue..."); 
             ReadLine();
             Program program = new Program();
             program.MemberInit();
         }
-
         void MemberInit()
         {
             while (true)
@@ -46,7 +45,7 @@ namespace CCW4_Artefact_SID_210473
                     WriteLine("Current Members:");
                     for (int i = 0; i < devTeam.Count; i++)
                     {
-                        PrintMembers(devTeam[i]);
+                        WriteLine(PrintMembers(devTeam[i]));
                     }
                     ReadLine();
                     continue; 
@@ -64,8 +63,7 @@ namespace CCW4_Artefact_SID_210473
                     tempMember.workAvailability = WorkInit();
 
                     Clear();
-                    PrintMembers(tempMember);
-                    bool allInfoCorrect = IsInfoCorrect("\n(Y/N)");
+                    bool allInfoCorrect = IsInfoCorrect($"{PrintMembers(tempMember)}\n(Y/N)");
                     if (allInfoCorrect) { break; }
                 }
                 devTeam.Add(tempMember);
@@ -75,13 +73,13 @@ namespace CCW4_Artefact_SID_210473
             WriteLine("The final team is:\n");
             for (int i = 0; i < devTeam.Count; i++)
             {
-                PrintMembers(devTeam[i]);
+                WriteLine(PrintMembers(devTeam[i]));
             }
             ReadLine();
         }
-        void PrintMembers(Member member)
+        string PrintMembers(Member member)
         {            
-            WriteLine($@"
+            return ($@"
 Name: {member.name}
 Age: {member.age}
 Profession: {member.profession}
