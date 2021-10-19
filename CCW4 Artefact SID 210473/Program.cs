@@ -4,14 +4,13 @@ using static System.Console;
 
 namespace CCW4_Artefact_SID_210473
 {
-    enum Profession
+    enum Profession // Enumerator of available professions for member
     {
         Programmer,
         Designer,
         Artist,
         Audio
     }
-
     struct Member
     {
         public string name;
@@ -19,7 +18,6 @@ namespace CCW4_Artefact_SID_210473
         public Profession profession;
         public bool workAvailability;
     }
-
     class Program
     {
         public const int MIN_TEAM_LIMIT = 3;
@@ -43,9 +41,9 @@ namespace CCW4_Artefact_SID_210473
                     Clear();
                     WriteLine("You need at least 3 members for a team\nPlease create a new member\nPress enter to continue...\n");
                     WriteLine("Current Members:");
-                    for (int i = 0; i < devTeam.Count; i++)
+                    foreach (Member member in devTeam)
                     {
-                        WriteLine(PrintMembers(devTeam[i]));
+                        WriteLine(PrintMembers(member));
                     }
                     ReadLine();
                     continue; 
