@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>CCW4_Artefact_SID_210473</RootNamespace>
+    <StartupObject>CCW4_Artefact_SID_210473.Program</StartupObject>
   </PropertyGroup>
 
 </Project>
